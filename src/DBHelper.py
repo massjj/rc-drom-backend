@@ -5,10 +5,10 @@ import os
 class DBHelper:
 
     def __init__(self):
-        self.host = "ec2-34-200-116-132.compute-1.amazonaws.com"
-        self.user = "ueeyxooovikpdg"
-        self.password = "8fc08da44fdbdbb57807b56500f16c7526d2cf40389240508f7c3249e8401ba4"
-        self.db = "d9guqu6qkhksd6"
+        self.host = "ec2-34-237-236-32.compute-1.amazonaws.com"
+        self.user = "kgyhoaojwpysgc"
+        self.password = "7e551814bdbb93795220c0b02ae6e15c5038e85d0296347ec31bb336c238d170"
+        self.db = "dcpo0te8jhm9oi"
 
     def __connect__(self):
         self.con = psycopg2.connect(host=self.host, user=self.user, password=self.password, dbname=self.db)
