@@ -1,4 +1,5 @@
 from flask import Flask, jsonify
+from flask_cors import CORS
 from src.Userlogin import *
 from src.Status import *
 from src.Repairlist import *
@@ -6,13 +7,12 @@ from src.Itemlist import *
 from src.Maintenance import *
 
 app = Flask(__name__)
+cors = CORS(app)
 userlogins = Userlogin()
 status = Status()
 repairlists = Repairlist()
 itemlists = Itemlist()
 maintenances = Maintenance()
-
-app = Flask(__name__)
 
 @app.route('/')
 def home():
