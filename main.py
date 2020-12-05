@@ -1,11 +1,4 @@
-from flask import Flask, jsonify, render_template, request
-import pymongo
-import markdown
-import markdown.extensions.fenced_code
-from pygments.formatters import HtmlFormatter
-from datetime import datetime,timedelta
-import os
-import random
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
