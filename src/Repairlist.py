@@ -60,17 +60,18 @@ class Repairlist:
         return {'Is Error': False, 'Error Message': ""}
 
     def dump(self):
-        db = DBHelper
-        data, columns = db.fetch ('SELECT r.repair_id as "Repair ID", r.status_id as "Status ID", r.maintenance_id as "Maintenance ID" '
-                              ' , r.phone as "Phone", r.inform_date as "Inform Date",r.accept_date as "Accept Date", r.total as "Total"'
-                              ' , ri.user_id as "User ID", ri.item_id as "Item ID" '
-                              ' , ri.amount_item as "Amount Item", ri.paid_amount as "Paid Amount", ri.repair_date as "Repair Date", ri.description as "Description" '
-                              ' FROM repairlist r JOIN status s ON r.status_id = s.status_id '
-                              '  JOIN maintenance m ON r.maintenance_id = m.maintenance_id'
-                              '  JOIN repair_item ri ON r.repair_id = ri.repair_id '
-                              '  JOIN userlogin u ON ri.user_id = u.user_id '
-                              '  JOIN itemlist t ON ri.item_id = t.item_id'
+        data, columns = db.fetch ('SELECT r.repair_id as "Repair ID", r.status_id as "Status ID", r.maintenance_id as "Maintenance ID"' 
+                              ', r.phone as "Phone", r.inform_date as "Inform Date",r.accept_date as "Accept Date", r.total as "Total"'
+                            #   ', ri.user_id as "User ID", ri.item_id as "Item ID" '
+                            #   ', ri.amount_item as "Amount Item", ri.paid_amount as "Paid Amount", ri.repair_date as "Repair Date", ri.description as "Description"' 
+                              'FROM repairlist r JOIN status s ON r.status_id = s.status_id'
+                              'JOIN maintenance m ON r.maintenance_id = m.maintenance_id'
+                            #   'JOIN repair_item ri ON r.repair_id = ri.repair_id'
+                            #   'JOIN userlogin u ON ri.user_id = u.user_id'
+                            #   'JOIN itemlist t ON ri.item_id = t.item_id'
                               ' ')
+        print(data)
+
         return row_as_dict(data, columns)
 
     def update_repairlist_line(self, repairId, userId,itemId,amountItem,paidAmount,repairDate,description): 

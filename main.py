@@ -32,6 +32,7 @@ def getStatus():
 @app.route('/getRepairlist', methods=['GET'])
 def getRepairList():
     x = repairlists.dump()
+    print(x)
     return jsonify(x)
 
 @app.route('/getItemlist', methods=['GET'])

@@ -40,5 +40,5 @@ class Userlogin:
         return {'Is Error': False, 'Error Message': ""}
 
     def dump(self):
-        data, columns = self.db.fetch ('SELECT user_id as "User ID",password as "Password", user_type as "User Type", user_name as "User Name" FROM userlogin ')
+        data, columns = self.db.fetch ('SELECT user_id as "User ID",password as "Password",user_name as "User Name" ,user_type as "User Type" FROM userlogin ')
         return row_as_dict(data, columns)
