@@ -10,32 +10,16 @@ def row_as_dict(data, columns):
         i=0
         items={}
         for col in row:
-            #skip first column for key of dictionary
             if (i > -1):
                 column_name = columns[i]
                 items[column_name] = str(col)
             i=i+1
         result.append(items)
     return result
-# def row_as_dict(data, columns):
-#     result = {}
-#     for row in data:
-#         i=0
-#         items = {}
-#         for col in row:
-#             #skip first column for key of dictionary
-#             if (i > 0):
-#                 column_name = columns[i]
-#                 items[column_name] = col
-#             i=i+1
-#         result[row[0]] = items
-#     return result
 
-#waitKeyPress is useful for debugging to know where you are.
 def waitKeyPress(waitMessage):
     waitForKeyPress = input(waitMessage + " (Press a key to continue).")
 
-#helper function to convert from string to date object. Not used yet.
 def dateStringToObject(stringDate):
     if stringDate is None:
         return None
@@ -46,11 +30,9 @@ def dateObjectToString(objectDate):
         return None
     return objectDate.strftime('%Y-%m-%d')
 
-#The helper function below is used to compare 2 dates that are in string format.
 def dateStringCompare(stringDate1, comparisonStr, stringDate2):
     objDate1 = dateStringToObject(stringDate1)
     objDate2 = dateStringToObject(stringDate2)
-
     switcher = {
         "==": objDate1 == objDate2,
         "<": objDate1 < objDate2,

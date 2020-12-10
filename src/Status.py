@@ -8,10 +8,10 @@ class Status:
     def create(self, statusId, statusName):
         data, columns = self.db.fetch ("SELECT * FROM status WHERE status_id = '{}' ".format(statusId))
         if len(data) > 0:
-            return {'Is Error': True, 'Error Message': "Status ID '{}' already exists. Cannot Create. ".format(statusId)}
+            return {'0.status': 'Error','1.Status ID': '','2.Status Name' : ''}
         else:
             self.db.execute ("INSERT INTO status (status_id,status_name) VALUES ('{}' ,'{}')".format(statusId,statusName))
-        return {'Is Error': False, 'Error Message': ""}
+        return {'0.status': 'Correct','1.Status ID': '{}'.format(statusId),'2.Status Name' : '{}'.format(statusName)}
     
     def read(self, statusId):
         data, columns = self.db.fetch ("SELECT status_id, status_name FROM status WHERE status_id = '{}' ".format(statusId))

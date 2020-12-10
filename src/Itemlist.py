@@ -8,10 +8,10 @@ class Itemlist:
     def create(self, itemId, itemType, itemName, quantity, price):
         data, columns = self.db.fetch ("SELECT * FROM itemlist WHERE item_id = '{}' ".format(itemId))
         if len(data) > 0:
-            return {'Is Error': True, 'Error Message': "Item ID '{}' already exists. Cannot Create. ".format(itemId)}
+            return {'0.status': 'Error','1.Item ID': '','2.Item Type' : '','3.Item Name' : '','4.Quantity' : '','5.Price' : ''}
         else:
             self.db.execute ("INSERT INTO itemlist (item_id,item_type,item_name,quantity,price) VALUES ('{}' ,'{}','{}','{}','{}')".format(itemId, itemType, itemName, quantity, price))
-        return {'Is Error': False, 'Error Message': ""}
+        return {'0.status': 'Correct','1.Item ID': '{}'.format(itemId),'2.Item Type' : '{}'.format(itemType),'3.Item Name' : '{}'.format(itemName),'4.Quantity' : '{}'.format(quantity),'5.Price' : '{}'.format(price)}
 
     def read(self, itemId):
         data, columns = self.db.fetch ("SELECT item_id,item_type,item_name,quantity,price FROM itemlist WHERE item_id = '{}' ".format(itemId))
