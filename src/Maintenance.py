@@ -25,11 +25,11 @@ class Maintenance:
     def update(self, maintenanceId, newmaintenanceName, newtel, newworkingDate,newworkingTime):
         data, columns = self.db.fetch ("SELECT * FROM maintenance WHERE maintenance_id = '{}' ".format(maintenanceId))
         if len(data) > 0:
-            self.db.execute (" UPDATE maintenance SET maintenance_name='{}',tel='{}',working_date= '{}' ,working_time = '{}' ".format(newmaintenanceName, newtel, newworkingDate,newworkingTime, maintenanceId))
+            self.db.execute (" UPDATE maintenance SET maintenance_name='{}',tel='{}',working_date= '{}' ,working_time = '{}' WHERE maintenance_id = '{}' ".format(newmaintenanceName, newtel, newworkingDate,newworkingTime, maintenanceId))
         else:
-            return {'Is Error': True, 'Error Message': "Maintenance ID '{}' not found. Cannot Update.".format(maintenanceId)}
+            return {'0.status': 'Update Error','1.Maintenance ID': '','2.Maintenance Name' : '','3.Tel.' : '','4.Working Date' : '','5.Working Time' : ''}
 
-        return {'Is Error': False, 'Error Message': ""}
+        return {'0.status': 'Update Successful','1.Maintenance ID': '{}'.format(maintenanceId),'2.Maintenance Name' : '{}'.format(newmaintenanceName),'3.Tel.' : '{}'.format(newtel),'4.Working Date' : '{}'.format(newworkingDate),'5.Working Time' : '{}'.format(newworkingTime)}
 
     def delete(self, maintenanceId):
         data, columns = self.db.fetch ("SELECT * FROM maintenance WHERE maintenance_id = '{}' ".format(maintenanceId))
@@ -37,7 +37,7 @@ class Maintenance:
             self.db.execute ("DELETE FROM maintenance WHERE maintenance_id='{}' ".format(maintenanceId))
         else:
             return {'Is Error': True, 'Error Message': "Maintenance ID '{}' not found. Cannot Delete".format(maintenanceId)}
-        return {'Is Error': False, 'Error Message': ""}
+        return {'Is Error': 'Delete Successful', 'Maintenance ID': '{}'.format(maintenanceId)}
 
     def dump(self):
         data, columns = self.db.fetch ('SELECT maintenance_id as "Maintenance ID", maintenance.maintenance_name as "Maintenance Name", tel as "Tel", working_date as "Working Date", working_time as "Working Time" '

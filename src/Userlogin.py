@@ -25,19 +25,19 @@ class Userlogin:
     def update(self, userId, newpassword, newuserType, newuserName):
         data, columns = self.db.fetch ("SELECT * FROM userlogin WHERE user_id = '{}' ".format(userId))
         if len(data) > 0:
-            self.db.execute (" UPDATE userlogin SET password ='{}',user_type = '{}', user_name = '{}' WHERE userlogin = '{}'".format(newpassword, newuserType, newuserName,userId))
+            self.db.execute (" UPDATE userlogin SET password ='{}',user_type = '{}', user_name = '{}'  WHERE user_id = '{}' ".format(newpassword, newuserType, newuserName,userId))
         else:
-            return {'Is Error': True, 'Error Message': "User ID '{}' not found. Cannot Update.".format(userId)}
+            return {'0.status': 'Update Error','1.User ID': '','2.Password' : '','3.User Type' : '','4.User Name' : ''}
 
-        return {'Is Error': False, 'Error Message': ""}
+        return {'0.status': 'Update Succesful','1.User ID': '{}'.format(userId),'2.Password' : '{}'.format(newpassword),'3.User Type' : '{}'.format(newuserType),'4.User Name' : '{}'.format(newuserName)}
 
     def delete(self, userId):
         data, columns = self.db.fetch ("SELECT * FROM userlogin WHERE user_id = '{}' ".format(userId))
         if len(data) > 0:
             self.db.execute ("DELETE FROM userlogin WHERE user_id='{}' ".format(userId))
         else:
-            return {'Is Error': True, 'Error Message': "user ID '{}' not found. Cannot Delete".format(userId)}
-        return {'Is Error': False, 'Error Message': ""}
+            return {'Is Error': 'Delete ERROR. It is Foreige key.', 'user ID': '{}'.format(userId)}
+        return {'Is Error': 'Delete Successful', 'user ID': '{}'.format(userId)}
 
     def dump(self):
         data, columns = self.db.fetch ('SELECT user_id as "User ID", password as "Password", user_type as "User Type", user_name as "User Name" '

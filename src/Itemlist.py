@@ -27,9 +27,10 @@ class Itemlist:
         if len(data) > 0:
             self.db.execute ("UPDATE itemlist SET item_type='{}',item_name='{}',quantity='{}',price='{}' WHERE item_id='{}' ".format(newitemType, newitemName, newQuantity, newPrice, itemId))
         else:
-            return {'Is Error': True, 'Error Message': "Item ID '{}' not found. Cannot Update.".format(itemId)}
+            return {'0.status': 'Update Error','1.Item ID': '','2.Item Type' : '','3.Item Name' : '','4.Quantity' : '','5.Price' : ''}
 
-        return {'Is Error': False, 'Error Message': ""}
+        return {'0.status': 'Update Successful','1.Item ID': '{}'.format(itemId),'2.Item Type' : '{}'.format(newitemType),'3.Item Name' : '{}'.format(newitemName),'4.Quantity' : '{}'.format(newQuantity),'5.Price' : '{}'.format(newPrice)}
+
 
     def delete(self, itemId):
         data, columns = self.db.fetch ("SELECT * FROM itemlist WHERE item_id = '{}' ".format(itemId))
@@ -37,7 +38,7 @@ class Itemlist:
             self.db.execute ("DELETE FROM itemlist WHERE item_id='{}' ".format(itemId))
         else:
             return {'Is Error': True, 'Error Message': "Item ID '{}' not found. Cannot Delete".format(itemId)}
-        return {'Is Error': False, 'Error Message': ""}
+        return {'Is Error': 'Delete Successful', 'Item ID': '{}'.format(itemId)}
 
     def dump(self):
         data, columns = self.db.fetch ('SELECT item_id as "Item ID",item_type as "Item Type", item_name as "Item Name", quantity as "Quantity", price as "Price" FROM itemlist ')

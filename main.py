@@ -30,9 +30,30 @@ def createUserlogin():
    if request.method=='POST':
       userId=request.form['user_id']
       password=request.form['password']
-      userName=request.form['user_name']
       userType=request.form['user_type']
+      userName=request.form['user_name']
       logs = userlogins.create(userId, password, userType, userName)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/updateUserlogin',methods=['PUT'])
+def updateUserlogin():
+   if request.method=='PUT':
+      userId=request.form['user_id']
+      newpassword=request.form['password']
+      newuserType=request.form['user_type']
+      newuserName=request.form['user_name']
+      logs = userlogins.update(userId, newpassword, newuserType, newuserName)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteUserlogin', methods=['DELETE'])
+def deleteUserlogin():
+   if request.method=='DELETE':
+      userId=request.form['user_id']
+      logs = userlogins.delete(userId)
       return logs
    else:
       return "Please use post medthod"
@@ -53,6 +74,25 @@ def createStatus():
    else:
       return "Please use post medthod"
 
+@app.route('/updateStatus',methods=['PUT'])
+def updateStatus():
+   if request.method=='PUT':
+      statusId=request.form['status_id']
+      newstatusName=request.form['status_name']
+      logs = status.update(statusId, newstatusName)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteStatus', methods=['DELETE'])
+def deleteStatus():
+   if request.method=='DELETE':
+      statusId=request.form['status_id']
+      logs = status.delete(statusId)
+      return logs
+   else:
+      return "Please use post medthod"
+
 #Repairlist
 @app.route('/getRepairlist', methods=['GET'])
 def getRepairlist():
@@ -63,7 +103,6 @@ def getRepairlist():
 @app.route('/createRepairlistitem',methods=['POST'])
 def createRepairlistitem():
    if request.method=='POST':
-      repairlists.execute ("DELETE FROM reapair_item WHERE repair_id = '{}' ".format(repairId))
       repairId=request.form['repair_id']
       userId = request.form['user_id']
       itemId = request.form['item_id']
@@ -71,7 +110,24 @@ def createRepairlistitem():
       paidAmount=request.form['paid_amount']
       repairDate=request.form['repair_date']
       description=request.form['description']
-      log = repairlists.create(repairId, userId , itemId,amountItem,paidAmount,repairDate,description)
+      logs = repairlists.createLineItem(repairId,userId , itemId,amountItem,paidAmount,repairDate,description)
+      
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/updateRepairlistitem',methods=['PUT'])
+def updateRepairlistitem():
+   if request.method=='PUT':
+      repairId=request.form['repair_id']
+      newuserId = request.form['user_id']
+      newitemId = request.form['item_id']
+      newamountItem=request.form['amount_item']
+      newpaidAmount=request.form['paid_amount']
+      newrepairDate=request.form['repair_date']
+      newdescription=request.form['description']
+      logs = repairlists.updatelineitem(repairId,newuserId , newitemId,newamountItem,newpaidAmount,newrepairDate,newdescription)
+      
       return logs
    else:
       return "Please use post medthod"
@@ -85,27 +141,40 @@ def createRepairlist():
       phone=request.form['phone']
       informDate=request.form['inform_date']
       acceptDate=request.form['accept_date']
-      userId = request.form['user_id']
-      itemId = request.form['item_id']
-      amountItem=request.form['amount_item']
-      paidAmount=request.form['paid_amount']
-      repairDate=request.form['repair_date']
-      description=request.form['description']
-      repairLineTuplesList = ("INSERT INTO repair_item (repair_id,user_id,item_id,amount_item,paid_amount,repair_date,description) VALUES ('{}','{}','{}','{}','{}','{}','{}')".format(repairId, userId , itemId,amountItem,paidAmount,repairDate,description))
-      # for repairLineTuplesList in repairLineTuplesList['repairLineTuplesList']:
-      #    repairId = repairLineTuplesList['repair_id']
-      #    userId = repairLineTuplesList['user_id']
-      #    itemId = repairLineTuplesList['item_id']
-      #    amountItem=repairLineTuplesList['amount_item']
-      #    paidAmount=repairLineTuplesList['paid_amount']
-      #    repairDate=repairLineTuplesList['repair_date']
-      #    description=repairLineTuplesList['description']
-      logs = repairlists.create(repairId,statusId,maintenanceId,phone,informDate,acceptDate,repairLineTuplesList)
-    #   ,userId , itemId,amountItem,paidAmount,repairDate,description)
+      logs = repairlists.create(repairId,statusId,maintenanceId,phone,informDate,acceptDate)
       return logs
    else:
       return "Please use post medthod"
 
+@app.route('/updateRepairlist',methods=['PUT'])
+def updateRepairlist():
+   if request.method=='PUT':
+      repairId=request.form['repair_id']
+      newstatusId=request.form['status_id']
+      newmaintenanceId=request.form['maintenance_id']
+      newphone=request.form['phone']
+      newinformDate=request.form['inform_date']
+      newacceptDate=request.form['accept_date']
+      logs = repairlists.update(repairId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteRepairlist', methods=['DELETE'])
+def deleteRepairlist():
+   if request.method=='DELETE':
+      repairId=request.form['repair_id']
+      logs = repairlists.delete(repairId)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteRepairlistitem', methods=['DELETE'])
+def deleteRepairlistitem():
+   if request.method=='DELETE':
+      repairId=request.form['repair_id']
+      logs = repairlists.deletelineitem(repairId)
+      return logs
 
 #Itemlist
 @app.route('/getItemlist', methods=['GET'])
@@ -126,6 +195,26 @@ def createItemlist():
    else:
       return "Please use post medthod"
 
+@app.route('/updateteItemlist',methods=['PUT'])
+def updateteItemlist():
+   if request.method=='PUT':
+      itemId=request.form['item_id']
+      newitemType=request.form['item_type']
+      newitemName=request.form['item_name']
+      newquantity=request.form['quantity']
+      newprice=request.form['price']
+      logs = itemlists.update(itemId, newitemType, newitemName, newquantity, newprice)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteItemlist', methods=['DELETE'])
+def deleteItemlist():
+   if request.method=='DELETE':
+      ItemId=request.form['item_id']
+      logs = itemlists.delete(ItemId)
+      return logs
+
 #Maintenance
 @app.route('/getMaintenance', methods=['GET'])
 def getMaintenance():
@@ -145,5 +234,25 @@ def createMaintenance():
    else:
       return "Please use post medthod"
     
+@app.route('/updateMaintenance',methods=['PUT'])
+def updateMaintenance():
+   if request.method=='PUT':
+      maintenanceId=request.form['maintenance_id']
+      newmaintenanceName=request.form['maintenance_name']
+      newtel=request.form['tel']
+      newworkingDate=request.form['working_date']
+      newworkingTime=request.form['working_time']
+      logs = maintenances.update(maintenanceId, newmaintenanceName, newtel, newworkingDate,newworkingTime)
+      return logs
+   else:
+      return "Please use post medthod"
+
+@app.route('/deleteMaintenance', methods=['DELETE'])
+def deleteMaintenance():
+   if request.method=='DELETE':
+      maintenanceId=request.form['maintenance_id']
+      logs = maintenances.delete(maintenanceId)
+      return logs
+
 if __name__ == "__main__":
     app.run(debug=True)
