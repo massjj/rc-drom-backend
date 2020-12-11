@@ -25,6 +25,15 @@ def getUserlogin():
     x = userlogins.dump()
     return jsonify(x)
 
+@app.route('/readUserlogin', methods=['GET'])
+def readUserlogin():
+   if request.method=='GET':
+      userId=request.form['user_id']
+      logs = userlogins.read(userId)
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
+
 @app.route('/createUserlogin',methods=['POST'])
 def createUserlogin():
    if request.method=='POST':
@@ -33,7 +42,7 @@ def createUserlogin():
       userType=request.form['user_type']
       userName=request.form['user_name']
       logs = userlogins.create(userId, password, userType, userName)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -45,7 +54,7 @@ def updateUserlogin():
       newuserType=request.form['user_type']
       newuserName=request.form['user_name']
       logs = userlogins.update(userId, newpassword, newuserType, newuserName)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -54,7 +63,7 @@ def deleteUserlogin():
    if request.method=='DELETE':
       userId=request.form['user_id']
       logs = userlogins.delete(userId)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -64,13 +73,22 @@ def getStatus():
     x = status.dump()
     return jsonify(x)
 
+@app.route('/readStatus', methods=['GET'])
+def readStatus():
+   if request.method=='GET':
+      statusId=request.form['status_id']
+      logs = status.read(statusId)
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
+
 @app.route('/createStatus',methods=['POST'])
 def createStatus():
    if request.method=='POST':
       statusId=request.form['status_id']
       statusName=request.form['status_name']
       logs = status.create(statusId, statusName)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -80,7 +98,7 @@ def updateStatus():
       statusId=request.form['status_id']
       newstatusName=request.form['status_name']
       logs = status.update(statusId, newstatusName)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -89,7 +107,7 @@ def deleteStatus():
    if request.method=='DELETE':
       statusId=request.form['status_id']
       logs = status.delete(statusId)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -100,49 +118,28 @@ def getRepairlist():
     print(x)
     return jsonify(x)
 
-@app.route('/createRepairlistitem',methods=['POST'])
-def createRepairlistitem():
-   if request.method=='POST':
+@app.route('/readRepairlist', methods=['GET'])
+def readRepairlist():
+   if request.method=='GET':
       repairId=request.form['repair_id']
-      userId = request.form['user_id']
-      itemId = request.form['item_id']
-      amountItem=request.form['amount_item']
-      paidAmount=request.form['paid_amount']
-      repairDate=request.form['repair_date']
-      description=request.form['description']
-      logs = repairlists.createLineItem(repairId,userId , itemId,amountItem,paidAmount,repairDate,description)
-      
-      return logs
-   else:
-      return "Please use post medthod"
-
-@app.route('/updateRepairlistitem',methods=['PUT'])
-def updateRepairlistitem():
-   if request.method=='PUT':
-      repairId=request.form['repair_id']
-      newuserId = request.form['user_id']
-      newitemId = request.form['item_id']
-      newamountItem=request.form['amount_item']
-      newpaidAmount=request.form['paid_amount']
-      newrepairDate=request.form['repair_date']
-      newdescription=request.form['description']
-      logs = repairlists.updatelineitem(repairId,newuserId , newitemId,newamountItem,newpaidAmount,newrepairDate,newdescription)
-      
-      return logs
+      logs = repairlists.readrepairlist(repairId)
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
 @app.route('/createRepairlist',methods=['POST'])
 def createRepairlist():
    if request.method=='POST':
-      repairId=request.form['repair_id']
+      # repairId=request.form['repair_id']
+      userId=request.form['user_id']
       statusId=request.form['status_id']
       maintenanceId=request.form['maintenance_id']
       phone=request.form['phone']
       informDate=request.form['inform_date']
       acceptDate=request.form['accept_date']
-      logs = repairlists.create(repairId,statusId,maintenanceId,phone,informDate,acceptDate)
-      return logs
+      description=request.form['description']
+      logs = repairlists.register(userId,statusId,maintenanceId,phone,informDate,acceptDate,description)
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -150,13 +147,15 @@ def createRepairlist():
 def updateRepairlist():
    if request.method=='PUT':
       repairId=request.form['repair_id']
+      newuserId=request.form['user_id']
       newstatusId=request.form['status_id']
       newmaintenanceId=request.form['maintenance_id']
       newphone=request.form['phone']
       newinformDate=request.form['inform_date']
       newacceptDate=request.form['accept_date']
-      logs = repairlists.update(repairId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate)
-      return logs
+      newdescription=request.form['description']
+      logs = repairlists.update(repairId,newuserId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate,newdescription)
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -165,7 +164,45 @@ def deleteRepairlist():
    if request.method=='DELETE':
       repairId=request.form['repair_id']
       logs = repairlists.delete(repairId)
-      return logs
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
+
+@app.route('/readRepairlistitem', methods=['GET'])
+def readRepairlistitem():
+   if request.method=='GET':
+      repairId=request.form['repair_id']
+      itemId = request.form['item_id']
+      logs = repairlists.readrepairlistitem(repairId,itemId)
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
+
+@app.route('/createRepairlistitem',methods=['POST'])
+def createRepairlistitem():
+   if request.method=='POST':
+      repairId=request.form['repair_id']
+      itemId = request.form['item_id']
+      amountItem=request.form['amount_item']
+      paidAmount=request.form['paid_amount']
+      repairDate=request.form['repair_date']
+      logs = repairlists.createLineItem(repairId,itemId,amountItem,paidAmount,repairDate)
+      
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
+
+@app.route('/updateRepairlistitem',methods=['PUT'])
+def updateRepairlistitem():
+   if request.method=='PUT':
+      repairId=request.form['repair_id']
+      itemId = request.form['item_id']
+      newamountItem=request.form['amount_item']
+      newpaidAmount=request.form['paid_amount']
+      newrepairDate=request.form['repair_date']
+      logs = repairlists.updatelineitem(repairId, itemId,newamountItem,newpaidAmount,newrepairDate)
+      
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -173,14 +210,24 @@ def deleteRepairlist():
 def deleteRepairlistitem():
    if request.method=='DELETE':
       repairId=request.form['repair_id']
-      logs = repairlists.deletelineitem(repairId)
-      return logs
+      itemId = request.form['item_id']
+      logs = repairlists.deletelineitem(repairId,itemId)
+      return jsonify(logs)
 
 #Itemlist
 @app.route('/getItemlist', methods=['GET'])
 def getItemlist():
     x = itemlists.dump()
     return jsonify(x)
+
+@app.route('/readItemlist', methods=['GET'])
+def readItemlist():
+   if request.method=='GET':
+      itemId=request.form['item_id']
+      logs = itemlists.read(itemId)
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
 
 @app.route('/createItemlist',methods=['POST'])
 def createItemlist():
@@ -191,7 +238,7 @@ def createItemlist():
       quantity=request.form['quantity']
       price=request.form['price']
       logs = itemlists.create(itemId, itemType, itemName, quantity, price)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -204,7 +251,7 @@ def updateteItemlist():
       newquantity=request.form['quantity']
       newprice=request.form['price']
       logs = itemlists.update(itemId, newitemType, newitemName, newquantity, newprice)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -213,13 +260,22 @@ def deleteItemlist():
    if request.method=='DELETE':
       ItemId=request.form['item_id']
       logs = itemlists.delete(ItemId)
-      return logs
+      return jsonify(logs)
 
 #Maintenance
 @app.route('/getMaintenance', methods=['GET'])
 def getMaintenance():
     x = maintenances.dump()
     return jsonify(x)
+
+@app.route('/readMaintenance', methods=['GET'])
+def readMaintenance():
+   if request.method=='GET':
+      maintenanceId=request.form['maintenance_id']
+      logs = maintenances.read(maintenanceId)
+      return jsonify(logs)
+   else:
+      return "Please use post medthod"
 
 @app.route('/createMaintenance',methods=['POST'])
 def createMaintenance():
@@ -230,7 +286,7 @@ def createMaintenance():
       workingDate=request.form['working_date']
       workingTime=request.form['working_time']
       logs = maintenances.create(maintenanceId, maintenanceName, tel, workingDate,workingTime)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
     
@@ -243,7 +299,7 @@ def updateMaintenance():
       newworkingDate=request.form['working_date']
       newworkingTime=request.form['working_time']
       logs = maintenances.update(maintenanceId, newmaintenanceName, newtel, newworkingDate,newworkingTime)
-      return logs
+      return jsonify(logs)
    else:
       return "Please use post medthod"
 
@@ -252,7 +308,9 @@ def deleteMaintenance():
    if request.method=='DELETE':
       maintenanceId=request.form['maintenance_id']
       logs = maintenances.delete(maintenanceId)
-      return logs
+      return jsonify(logs)
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

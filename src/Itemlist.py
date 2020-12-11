@@ -18,9 +18,9 @@ class Itemlist:
         if len(data) > 0:
             retItemlist = row_as_dict(data, columns)
         else:
-            return ({'Is Error': True, 'Error Message': "Item ID '{}' not found. Cannot Read.".format(itemId)},{})
+            return ({'Is Error': 'Error', 'Error Message': "Item ID '{}' ".format(itemId)},{})
 
-        return ({'Is Error': False, 'Error Message': ""},retItemlist)
+        return ({'Is Error': 'Correct', 'Error Message': ""},retItemlist)
 
     def update(self, itemId, newitemType, newitemName, newQuantity, newPrice):
         data, columns = self.db.fetch ("SELECT * FROM itemlist WHERE item_id = '{}' ".format(itemId))

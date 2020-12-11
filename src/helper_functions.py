@@ -113,6 +113,13 @@ def printCSVLineItem(datas, columns):
             else:
                 print("{}".format(data[value_indx]))
 
+def increaseID(id,text):
+    newID = id.split(text)
+    print(newID)
+    newID = str(int(newID[1])+1)
+    newID = text+(7-(len(newID)+len(text)))*"0"+newID
+    return newID
+
 def printTable(myDict, colList=None):
    """ Pretty print a list of dictionaries (myDict) as a dynamically sized table.
    If column names (colList) aren't specified, they will show in random order.

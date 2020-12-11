@@ -14,13 +14,12 @@ class Userlogin:
         return {'0.status': 'Correct','1.User ID': '{}'.format(userId),'2.Password' : '{}'.format(password),'3.User Type' : '{}'.format(userType),'4.User Name' : '{}'.format(userName)}
 
     def read(self, userId):
-        data, columns = self.db.fetch ("SELECT user_id,password,user_type,user_name FROM userlogin WHERE user_id = '{}' ".format(userId))
+        data, columns = self.db.fetch ("SELECT * FROM userlogin WHERE user_id = '{}' ".format(userId))
         if len(data) > 0:
             retUserlogin = row_as_dict(data, columns)
         else:
-            return ({'Is Error': True, 'Error Message': "User ID '{}' not found. Cannot Read.".format(userId)},{})
-
-        return ({'Is Error': False, 'Error Message': ""},retUserlogin)
+            return ({'Is Error': 'Error', 'Error Message': "User ID '{}' ".format(userId)},{})
+        return ({'Is Error': "Correct", 'Error Message': ""},retUserlogin)
 
     def update(self, userId, newpassword, newuserType, newuserName):
         data, columns = self.db.fetch ("SELECT * FROM userlogin WHERE user_id = '{}' ".format(userId))

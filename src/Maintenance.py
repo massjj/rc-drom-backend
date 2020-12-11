@@ -18,9 +18,8 @@ class Maintenance:
         if len(data) > 0:
             retMaintenance = row_as_dict(data, columns)
         else:
-            return ({'Is Error': True, 'Error Message': "Maintenance ID '{}' not found. Cannot Read.".format(maintenanceId)},{})
-
-        return ({'Is Error': False, 'Error Message': ""},retMaintenance)
+            return ({'Is Error': 'Error', 'Error Message': "Maintenance ID '{}' ".format(maintenanceId)},{})
+        return ({'Is Error': 'Correct', 'Error Message': ""},retMaintenance)
 
     def update(self, maintenanceId, newmaintenanceName, newtel, newworkingDate,newworkingTime):
         data, columns = self.db.fetch ("SELECT * FROM maintenance WHERE maintenance_id = '{}' ".format(maintenanceId))

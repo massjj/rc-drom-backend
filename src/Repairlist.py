@@ -11,52 +11,75 @@ class Repairlist:
     
     def updateRepairlistTotal (self, repairId):
 
-        sql = ("UPDATE receipt SET "
+        sql = ("UPDATE repairlist SET "
                " total = line_item.total_repairlist"
                " FROM (SELECT repair_id, SUM(paid_amount) as total_repairlist FROM repair_item GROUP BY repair_id) line_item "
                " WHERE repairlist.repair_id = line_item.repair_id "
                " AND repairlist.repair_id = '{}' ".format(repairId))
         self.db.execute(sql)
 
-    def createLineItem (self, repairId,userId , itemId,amountItem,paidAmount,repairDate,description):
-        data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' ".format(repairId))
-        if len(data) > 0:
-            return {'0.status': 'Error','1.Repair ID': '','2.User ID' : '','3.Item ID' : '','4.Amount Item' : '','5.Paid Amount' : '','6.Repair Date' : '','7.Description' : ''}
-        else:
-            self.db.execute ("INSERT INTO repair_item (repair_id,user_id,item_id,amount_item,paid_amount,repair_date,description) VALUES ('{}' ,'{}','{}','{}','{}','{}','{}')".format(repairId,userId , itemId,amountItem,paidAmount,repairDate,description))
-        return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.User ID' : '{}'.format(userId),'3.Item ID' : '{}'.format(itemId),'4.Amount Item' : '{}'.format(amountItem),'5.Paid Amount' : '{}'.format(paidAmount),'6.Repair Date' : '{}'.format(repairDate),'7.Description' : '{}'.format(description)}
+    def create(self,  repairId,userId ,statusId, maintenanceId, phone,informDate,acceptDate,description):
+        self.db.execute ("INSERT INTO repairlist (repair_id,user_id,status_id,maintenance_id,phone,inform_date,accept_date,description) VALUES ('{}','{}','{}','{}','{}','{}','{}','{}')".format(
+            repairId,userId ,statusId, maintenanceId, phone,informDate,acceptDate,description))
+        return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.User ID' : '{}'.format(userId),'3.Status ID' : '{}'.format(statusId),
+        '4.Maintenance ID' : '{}'.format(maintenanceId),'5.Phone' : '{}'.format(phone),'6.Inform Date' : '{}'.format(informDate),
+        '7.Accept Date' : '{}'.format(acceptDate),'8.Description' : '{}'.format(description)}
 
-    def create(self,  repairId, statusId, maintenanceId, phone,informDate,acceptrDate):
-        data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}' ".format(repairId))
-        if len(data) > 0:
-            return {'0.status': 'Error','1.Repair ID': '','2.Status ID' : '','3.Maintenance ID' : '','4.Phone' : '','5.Inform Date' : '','6.Accept Date' : '','7.Repair List' : ''}
-        else:
-            self.db.execute ("INSERT INTO repairlist (repair_id,status_id,maintenance_id,phone,inform_date,accept_date) VALUES ('{}' ,'{}','{}','{}','{}','{}')".format(repairId, statusId, maintenanceId, phone,informDate,acceptrDate))
-        return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.Status ID' : '{}'.format(statusId),'3.Maintenance ID' : '{}'.format(maintenanceId),'4.Phone' : '{}'.format(phone),'5.Inform Date' : '{}'.format(informdate),'6.Accept Date' : '{}'.format(acceptrDate)}
+    def register(self, userId,statusId ,maintenanceId, phone,informDate,acceptDate,description):
+        data, columns = self.db.fetch ("SELECT MAX(r.repair_id) FROM repairlist r ")
+        newID = increaseID(data[0][0],"RCT")
+        logs = self.create(newID,userId ,statusId, maintenanceId, phone,informDate,acceptDate,description)
+        return logs
 
-    def read(self, repairId):
-        data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}' ".format(repairId))
+    def createLineItem (self, repairId, itemId,amountItem,paidAmount,repairDate):
+        data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}',itemId = '{}' ".format(repairId,itemId))
+        if len(data) > 0:
+            return {'0.status': 'Error','1.Repair ID': '','2.Item ID' : '','3.Amount Item' : '','4.Paid Amount' : '','5.Repair Date' : ''}
+        else:
+            self.db.execute ("INSERT INTO repair_item (repair_id,item_id,amount_item,paid_amount,repair_date) VALUES ('{}','{}','{}','{}','{}')".format(repairId, itemId,amountItem,paidAmount,repairDate))
+        return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.Item ID' : '{}'.format(itemId),'3.Amount Item' : '{}'.format(amountItem),'4.Paid Amount' : '{}'.format(paidAmount),'5.Repair Date' : '{}'.format(repairDate)}
+
+        # else:
+        #     data, columns = self.db.fetch ("INSERT INTO  repair_item (repair_id,item_id,amount_item,paid_amount,repair_date) VALUES ('{}','{}','{}','{}','{}')".format(repairId, itemId,amountItem,paidAmount,repairDate))
+        #     return row_as_dict(data, columns)
+
+    # def registerLineitem(self, itemId,amountItem,paidAmount,repairDate):
+    #     data, columns = self.db.fetch ("SELECT MAX(r.repair_id) FROM repairlist r ")
+    #     # newID = row_as_dict(data,columns)
+    #     logs = self.create(repairId, itemId,amountItem,paidAmount,repairDate)
+    #     return logs
+
+    def readrepairlist(self, repairId):
+        data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}'".format(repairId))
         if len(data) > 0:
             retRepairlist = row_as_dict(data, columns)
         else:
-            return ({'Is Error': True, 'Error Message': "Repair ID '{}' not found. Cannot Read.".format(repairId)},{})
-        return ({'Is Error': False, 'Error Message': ""},retRepairlist)
+            return ({'Is Error': 'Error', 'Error Message': "Repair ID '{}' not found. Cannot Read.".format(repairId)},{})
+        return ({'Is Error': 'Correct', 'Error Message': ""},retRepairlist)
 
-    def update(self, repairId, newstatusId, newmaintenanceId, newphone,newinformDate,newacceptrDate):
+    def readrepairlistitem(self, repairId,itemId):
+        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND item_id = '{}' ".format(repairId,itemId))
+        if len(data) > 0:
+            retRepairlist = row_as_dict(data, columns)
+        else:
+            return ({'Is Error': 'Error', 'Error Message': "Repair ID '{}' , Item ID '{}' not found. Cannot Read.".format(repairId,itemId)},{})
+        return ({'Is Error': 'Correct', 'Error Message': ""},retRepairlist)
+
+    def update(self, repairId,newuserId, newstatusId, newmaintenanceId, newphone,newinformDate,newacceptDate,newdescription):
         data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}' ".format(repairId))
         if len(data) > 0:
-            self.db.execute("UPDATE repairlist SET  status_id = '{}', maintenance_id = '{}', phone='{}',inform_date='{}',accept_date='{}' WHERE repair_id = '{}' ".format(newstatusId,newmaintenanceId,newphone,newinformDate,newacceptrDate,repairId))
+            self.db.execute("UPDATE repairlist SET user_id = '{}',  status_id = '{}', maintenance_id = '{}', phone='{}',inform_date='{}',accept_date='{}',description='{}' WHERE repair_id = '{}' ".format(newuserId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate,newdescription,repairId))
         else:
-            return {'0.status': 'Update Error','1.Repair ID': '','2.Status ID' : '','3.Maintenance ID' : '','4.Phone' : '','5.Inform Date' : '','6.Accept Date' : '','7.Repair List' : ''}
-        return {'0.status': 'Update Succesful','1.Repair ID': '{}'.format(repairId),'2.Status ID' : '{}'.format(newstatusId),'3.Maintenance ID' : '{}'.format(newmaintenanceId),'4.Phone' : '{}'.format(newphone),'5.Inform Date' : '{}'.format(newinformDate),'6.Accept Date' : '{}'.format(newacceptrDate)}
+            return {'0.status': 'Update Error','1.Repair ID': '','2.User ID':'','3.Status ID' : '','4.Maintenance ID' : '','5.Phone' : '','6.Inform Date' : '','7.Accept Date' : '','8.Description' : ''}
+        return {'0.status': 'Update Successful','1.Repair ID': '{}'.format(repairId),'2.User ID' : '{}'.format(newuserId),'3.Status ID' : '{}'.format(newstatusId),'4.Maintenance ID' : '{}'.format(newmaintenanceId),'5.Phone' : '{}'.format(newphone),'6.Inform Date' : '{}'.format(newinformDate),'7.Accept Date' : '{}'.format(newacceptDate),'8.Description' : '{}'.format(newdescription)}
 
-    def updatelineitem(self, repairId,newuserId , newitemId,newamountItem,newpaidAmount,newrepairDate,newdescription):
-        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' ".format(repairId))
+    def updatelineitem(self, repairId , itemId,newamountItem,newpaidAmount,newrepairDate):
+        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}',itemId = '{}' ".format(repairId,itemId))
         if len(data) > 0:
-            self.db.execute ("UPDATE repair_item SET  user_id = '{}', item_id = '{}', amount_item='{}',paid_amount='{}',repair_date='{}',description='{}' WHERE repair_id = '{}' ".format(newuserId , newitemId,newamountItem,newpaidAmount,newrepairDate,newdescription,repairId))
+            self.db.execute ("UPDATE repair_item SET amount_item='{}',paid_amount='{}',repair_date='{}' WHERE repair_id = '{}', itemId = '{}'".format(newamountItem,newpaidAmount,newrepairDate,newdescription,repairId,itemId))
         else:
-            return {'0.status': 'Update Error','1.Repair ID': '','2.User ID' : '','3.Item ID' : '','4.Amount Item' : '','5.Paid Amount' : '','6.Repair Date' : '','7.Description' : ''}
-        return {'0.status': 'Update Succesful','1.Repair ID': '{}'.format(repairId),'2.User ID' : '{}'.format(newuserId),'3.Item ID' : '{}'.format(newitemId),'4.Amount Item' : '{}'.format(newamountItem),'5.Paid Amount' : '{}'.format(newpaidAmount),'6.Repair Date' : '{}'.format(newrepairDate),'7.Description' : '{}'.format(newdescription)}
+            return {'0.status': 'Update Error','1.Repair ID': '','2.Item ID' : '','3.Amount Item' : '','4.Paid Amount' : '','5.Repair Date' : ''}
+        return {'0.status': 'Update Succesful','1.Repair ID': '{}'.format(repairId),'3.Item ID' : '{}'.format(itemId),'4.Amount Item' : '{}'.format(newamountItem),'5.Paid Amount' : '{}'.format(newpaidAmount),'6.Repair Date' : '{}'.format(newrepairDate)}
 
     
     def delete(self, repairId):
@@ -67,48 +90,48 @@ class Repairlist:
             return {'0.status': 'Delete Error','1.Repair ID': ''}
         return {'0.status': 'Delete Succesful','1.Repair ID': '{}'.format(repairId)}
 
-    def deletelineitem(self, repairId):
-        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' ".format(repairId))
+    def deletelineitem(self, repairId,itemId):
+        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}',itemId = '{}' ".format(repairId,itemId))
         if len(data) > 0:
-            self.db.execute ("DELETE FROM repair_item WHERE repair_id = '{}' ".format(repairId))
+            self.db.execute ("DELETE FROM repair_item WHERE repair_id = '{}'itemId = '{}' ".format(repairId,itemId))
         else:
             return {'0.status': 'Delete Error','1.Repair ID': ''}
-        return {'0.status': 'Delete Succesful','1.Repair ID': '{}'.format(repairId)}
+        return {'0.status': 'Delete Succesful','1.Repair ID': '{}'.format(repairId),'2.Item ID' : '{}'.format(itemId)}
 
     def dump(self):
         db = DBHelper()
-        data, columns = db.fetch ('SELECT r.repair_id as "Repair ID", r.status_id as "Status ID",r.maintenance_id as "Maintenanace ID" '
+        data, columns = db.fetch ('SELECT r.repair_id as "Repair ID", r.user_id as "User ID", r.status_id as "Status ID",r.maintenance_id as "Maintenanace ID" '
                               ' , r.phone as "Phone", r.inform_date as "Inform Date",r.accept_date as "Accept Date" '
-                              ' ,  r.total as "Total" '
-                              ' , ri.user_id as "User ID", ri.item_id as "Item ID"'
-                              ' , ri.amount_item As "Amount Item",ri.paid_amount as "Paid Amount",ri.repair_date as "Repair Date",ri.description as "Description"'
+                              ' ,  r.total as "Total",r.description as "Description" '
+                              ' , ri.item_id as "Item ID"'
+                              ' , ri.amount_item As "Amount Item",ri.paid_amount as "Paid Amount",ri.repair_date as "Repair Date"'
                               ' FROM repairlist r JOIN status s ON r.status_id = s.status_id '
                               '  JOIN maintenance m ON r.maintenance_id = m.maintenance_id'
                               '  JOIN repair_item ri ON r.repair_id = ri.repair_id '
-                              '  JOIN userlogin u ON ri.user_id = u.user_id'
+                              '  JOIN userlogin u ON r.user_id = u.user_id'
                               '  JOIN itemlist t ON ri.item_id = t.item_id '
                               ' ')
         return row_as_dict(data, columns)
 
-    def update_repair_line(self, repairId, userId , itemId,amountItem,paidAmount,repairDate,description):
-        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
-        if len(data) > 0:
-            self.db.execute ("UPDATE repair_item SET amount_item = '{}',paid_amount = '{}', repair_date = {}, description = '{}' WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(amountItem,paidAmount,repairDate,description,repairId, userId , itemId))
-            self.updateRepairlistTotal(repairId)
-        else:
-            return {'Is Error': True, 'Error Message': "User ID '{}' not found in Repair ID '{}'. Cannot Update.".format(userId, repairId)}
+    # def update_repair_line(self, repairId, userId , itemId,amountItem,paidAmount,repairDate,description):
+    #     data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
+    #     if len(data) > 0:
+    #         self.db.execute ("UPDATE repair_item SET amount_item = '{}',paid_amount = '{}', repair_date = {}, description = '{}' WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(amountItem,paidAmount,repairDate,description,repairId, userId , itemId))
+    #         self.updateRepairlistTotal(repairId)
+    #     else:
+    #         return {'Is Error': True, 'Error Message': "User ID '{}' not found in Repair ID '{}'. Cannot Update.".format(userId, repairId)}
 
-        return {'Is Error': False, 'Error Message': ""}
+    #     return {'Is Error': False, 'Error Message': ""}
 
 
-    def delete_receipt_line(self,repairId, userId , itemId):
-        data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
-        if len(data) > 0:
-            self.db.execute ("DELETE FROM repair_item WHERE  repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
-            self.updateRepairlistTotal(repairId)
+    # def delete_receipt_line(self,repairId, userId , itemId):
+    #     data, columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
+    #     if len(data) > 0:
+    #         self.db.execute ("DELETE FROM repair_item WHERE  repair_id = '{}' AND user_id = '{}' AND item_id = '{}' ".format(repairId, userId , itemId))
+    #         self.updateRepairlistTotal(repairId)
 
-        else:
-            return {'Is Error': True, 'Error Message': "User ID '{}' not found in Repair ID '{}'. Cannot Update.".format(userId, repairId)}
+    #     else:
+    #         return {'Is Error': True, 'Error Message': "User ID '{}' not found in Repair ID '{}'. Cannot Update.".format(userId, repairId)}
 
-        return {'Is Error': False, 'Error Message': ""}
+    #     return {'Is Error': False, 'Error Message': ""}
 
