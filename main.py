@@ -1,5 +1,5 @@
 from flask import Flask, jsonify,request,render_template
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 from src.Userlogin import *
 from src.Status import *
 from src.Repairlist import *
@@ -15,17 +15,20 @@ itemlists = Itemlist()
 maintenances = Maintenance()
 
 @app.route('/')
+@cross_origin()
 def home():
     print(os.getenv("DB_HOST"))
     return "Welcom to backend EiEi"
 
 #Userlogin
 @app.route('/getUserlogin', methods=['GET'])
+@cross_origin()
 def getUserlogin():
     x = userlogins.dump()
     return jsonify(x)
 
 @app.route('/readUserlogin', methods=['GET'])
+@cross_origin()
 def readUserlogin():
    if request.method=='GET':
       userId=request.form['user_id']
@@ -35,6 +38,7 @@ def readUserlogin():
       return "Please use post medthod"
 
 @app.route('/createUserlogin',methods=['POST'])
+@cross_origin()
 def createUserlogin():
    if request.method=='POST':
       userId=request.form['user_id']
@@ -47,6 +51,7 @@ def createUserlogin():
       return "Please use post medthod"
 
 @app.route('/updateUserlogin',methods=['PUT'])
+@cross_origin()
 def updateUserlogin():
    if request.method=='PUT':
       userId=request.form['user_id']
@@ -59,6 +64,7 @@ def updateUserlogin():
       return "Please use post medthod"
 
 @app.route('/deleteUserlogin', methods=['DELETE'])
+@cross_origin()
 def deleteUserlogin():
    if request.method=='DELETE':
       userId=request.form['user_id']
@@ -69,11 +75,13 @@ def deleteUserlogin():
 
 #Status
 @app.route('/getStatus', methods=['GET'])
+@cross_origin()
 def getStatus():
     x = status.dump()
     return jsonify(x)
 
 @app.route('/readStatus', methods=['GET'])
+@cross_origin()
 def readStatus():
    if request.method=='GET':
       statusId=request.form['status_id']
@@ -83,6 +91,7 @@ def readStatus():
       return "Please use post medthod"
 
 @app.route('/createStatus',methods=['POST'])
+@cross_origin()
 def createStatus():
    if request.method=='POST':
       statusId=request.form['status_id']
@@ -93,6 +102,7 @@ def createStatus():
       return "Please use post medthod"
 
 @app.route('/updateStatus',methods=['PUT'])
+@cross_origin()
 def updateStatus():
    if request.method=='PUT':
       statusId=request.form['status_id']
@@ -103,6 +113,7 @@ def updateStatus():
       return "Please use post medthod"
 
 @app.route('/deleteStatus', methods=['DELETE'])
+@cross_origin()
 def deleteStatus():
    if request.method=='DELETE':
       statusId=request.form['status_id']
@@ -113,11 +124,13 @@ def deleteStatus():
 
 #Repairlist
 @app.route('/getRepairlist', methods=['GET'])
+@cross_origin()
 def getRepairlist():
     x = repairlists.dump()
     return jsonify(x)
 
 @app.route('/readRepairlist', methods=['GET'])
+@cross_origin()
 def readRepairlist():
    if request.method=='GET':
       repairId=request.form['repair_id']
@@ -127,6 +140,7 @@ def readRepairlist():
       return "Please use post medthod"
 
 @app.route('/createRepairlist',methods=['POST'])
+@cross_origin()
 def createRepairlist():
    if request.method=='POST':
       # repairId=request.form['repair_id']
@@ -145,6 +159,7 @@ def createRepairlist():
       return "Please use post medthod"
 
 @app.route('/updateRepairlist',methods=['PUT'])
+@cross_origin()
 def updateRepairlist():
    if request.method=='PUT':
       repairId=request.form['repair_id']
@@ -163,6 +178,7 @@ def updateRepairlist():
       return "Please use post medthod"
 
 @app.route('/deleteRepairlist', methods=['DELETE'])
+@cross_origin()
 def deleteRepairlist():
    if request.method=='DELETE':
       repairId=request.form['repair_id']
@@ -172,6 +188,7 @@ def deleteRepairlist():
       return "Please use post medthod"
 
 @app.route('/readRepairlistitem', methods=['GET'])
+@cross_origin()
 def readRepairlistitem():
    if request.method=='GET':
       repairId=request.form['repair_id']
@@ -182,6 +199,7 @@ def readRepairlistitem():
       return "Please use post medthod"
 
 @app.route('/createRepairlistitem',methods=['POST'])
+@cross_origin()
 def createRepairlistitem():
    if request.method=='POST':
       repairId=request.form['repair_id']
@@ -193,6 +211,7 @@ def createRepairlistitem():
       return "Please use post medthod"
 
 @app.route('/updateRepairlistitem',methods=['PUT'])
+@cross_origin()
 def updateRepairlistitem():
    if request.method=='PUT':
       repairId=request.form['repair_id']
@@ -204,6 +223,7 @@ def updateRepairlistitem():
       return "Please use post medthod"
 
 @app.route('/deleteRepairlistitem', methods=['DELETE'])
+@cross_origin()
 def deleteRepairlistitem():
    if request.method=='DELETE':
       repairId=request.form['repair_id']
@@ -213,6 +233,7 @@ def deleteRepairlistitem():
 
 #Itemlist
 @app.route('/getItemlist', methods=['GET'])
+@cross_origin()
 def getItemlist():
     x = itemlists.dump()
     return jsonify(x)
@@ -227,6 +248,7 @@ def readItemlist():
       return "Please use post medthod"
 
 @app.route('/createItemlist',methods=['POST'])
+@cross_origin()
 def createItemlist():
    if request.method=='POST':
       itemId=request.form['item_id']
@@ -240,6 +262,7 @@ def createItemlist():
       return "Please use post medthod"
 
 @app.route('/updateteItemlist',methods=['PUT'])
+@cross_origin()
 def updateteItemlist():
    if request.method=='PUT':
       itemId=request.form['item_id']
@@ -253,6 +276,7 @@ def updateteItemlist():
       return "Please use post medthod"
 
 @app.route('/deleteItemlist', methods=['DELETE'])
+@cross_origin()
 def deleteItemlist():
    if request.method=='DELETE':
       ItemId=request.form['item_id']
@@ -261,11 +285,13 @@ def deleteItemlist():
 
 #Maintenance
 @app.route('/getMaintenance', methods=['GET'])
+@cross_origin()
 def getMaintenance():
     x = maintenances.dump()
     return jsonify(x)
 
 @app.route('/readMaintenance', methods=['GET'])
+@cross_origin()
 def readMaintenance():
    if request.method=='GET':
       maintenanceId=request.form['maintenance_id']
@@ -275,6 +301,7 @@ def readMaintenance():
       return "Please use post medthod"
 
 @app.route('/createMaintenance',methods=['POST'])
+@cross_origin()
 def createMaintenance():
    if request.method=='POST':
       maintenanceId=request.form['maintenance_id']
@@ -288,6 +315,7 @@ def createMaintenance():
       return "Please use post medthod"
     
 @app.route('/updateMaintenance',methods=['PUT'])
+@cross_origin()
 def updateMaintenance():
    if request.method=='PUT':
       maintenanceId=request.form['maintenance_id']
@@ -301,6 +329,7 @@ def updateMaintenance():
       return "Please use post medthod"
 
 @app.route('/deleteMaintenance', methods=['DELETE'])
+@cross_origin()
 def deleteMaintenance():
    if request.method=='DELETE':
       maintenanceId=request.form['maintenance_id']
