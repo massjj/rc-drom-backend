@@ -186,9 +186,7 @@ def createRepairlistitem():
    if request.method=='POST':
       repairId=request.form['repair_id']
       itemId = request.form['item_id']
-      amountItem=request.form['amount_item']
-      paidAmount=request.form['paid_amount']
-      logs = repairlists.createLineItem(repairId,itemId,amountItem,paidAmount)
+      logs = repairlists.createLineItem(repairId,itemId)
       
       return jsonify(logs)
    else:
@@ -199,9 +197,7 @@ def updateRepairlistitem():
    if request.method=='PUT':
       repairId=request.form['repair_id']
       itemId = request.form['item_id']
-      newamountItem=request.form['amount_item']
-      newpaidAmount=request.form['paid_amount']
-      logs = repairlists.updatelineitem(repairId, itemId,newamountItem,newpaidAmount)
+      logs = repairlists.updatelineitem(repairId, itemId)
       
       return jsonify(logs)
    else:
@@ -310,8 +306,6 @@ def deleteMaintenance():
       maintenanceId=request.form['maintenance_id']
       logs = maintenances.delete(maintenanceId)
       return jsonify(logs)
-
-
 
 if __name__ == "__main__":
     app.run(debug=True)
