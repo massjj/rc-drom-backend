@@ -115,7 +115,6 @@ def deleteStatus():
 @app.route('/getRepairlist', methods=['GET'])
 def getRepairlist():
     x = repairlists.dump()
-    print(x)
     return jsonify(x)
 
 @app.route('/readRepairlist', methods=['GET'])
@@ -137,8 +136,10 @@ def createRepairlist():
       phone=request.form['phone']
       informDate=request.form['inform_date']
       acceptDate=request.form['accept_date']
+      repairDate=request.form['repair_date']
+      timeRepair=request.form['time_repair']
       description=request.form['description']
-      logs = repairlists.register(userId,statusId,maintenanceId,phone,informDate,acceptDate,description)
+      logs = repairlists.register(userId,statusId,maintenanceId,phone,informDate,acceptDate,repairDate,timeRepair,description)
       return jsonify(logs)
    else:
       return "Please use post medthod"
@@ -153,8 +154,10 @@ def updateRepairlist():
       newphone=request.form['phone']
       newinformDate=request.form['inform_date']
       newacceptDate=request.form['accept_date']
+      newrepairDate=request.form['repair_date']
+      newtimeRepair=request.form['time_repair']
       newdescription=request.form['description']
-      logs = repairlists.update(repairId,newuserId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate,newdescription)
+      logs = repairlists.update(repairId,newuserId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate,newrepairDate,newtimeRepair,newdescription)
       return jsonify(logs)
    else:
       return "Please use post medthod"
@@ -185,8 +188,7 @@ def createRepairlistitem():
       itemId = request.form['item_id']
       amountItem=request.form['amount_item']
       paidAmount=request.form['paid_amount']
-      repairDate=request.form['repair_date']
-      logs = repairlists.createLineItem(repairId,itemId,amountItem,paidAmount,repairDate)
+      logs = repairlists.createLineItem(repairId,itemId,amountItem,paidAmount)
       
       return jsonify(logs)
    else:
@@ -199,8 +201,7 @@ def updateRepairlistitem():
       itemId = request.form['item_id']
       newamountItem=request.form['amount_item']
       newpaidAmount=request.form['paid_amount']
-      newrepairDate=request.form['repair_date']
-      logs = repairlists.updatelineitem(repairId, itemId,newamountItem,newpaidAmount,newrepairDate)
+      logs = repairlists.updatelineitem(repairId, itemId,newamountItem,newpaidAmount)
       
       return jsonify(logs)
    else:
