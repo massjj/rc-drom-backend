@@ -21,7 +21,7 @@ class Repairlist:
         logs = self.create(newID,userId, phone,repairDate,timeRepair,description)
         return logs
 
-    def createLineItem (self, repairId, itemId):
+    def createLineItem (self, itemId):
         data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND item_id = '{}' ".format(repairId,itemId))
         if len(data) > 0:
             return {'0.status': 'Error','1.Repair ID': '','2.Item ID' : ''}

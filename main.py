@@ -152,11 +152,7 @@ def readRepairlist():
 def createRepairlist():
    if request.method=='POST':
       userId=request.form['user_id']
-      # statusId=request.form['status_id']
-      # maintenanceId=request.form['maintenance_id']
       phone=request.form['phone']
-      # informDate=request.form['inform_date']
-      # acceptDate=request.form['accept_date']
       repairDate=request.form['repair_date']
       timeRepair=request.form['time_repair']
       description=request.form['description']
