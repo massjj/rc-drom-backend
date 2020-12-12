@@ -27,8 +27,9 @@ class Repairlist:
         if len(data) > 0:
             return {'0.status': 'Error','1.Repair ID': '','2.Item ID' : ''}
         else:
-            self.db.execute ("INSERT INTO repair_item (repair_id,item_id) VALUES ('{}','{}')".format(repairId, itemId))
-        return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.Item ID' : '{}'.format(itemId)}
+            newID = increaseID(data[0][0],"RCT")
+            self.db.execute ("INSERT INTO repair_item (repair_id,item_id) VALUES ('{}','{}')".format(newID, itemId))
+        return {'0.status': 'Correct','1.Repair ID': '{}'.format(newID),'2.Item ID' : '{}'.format(itemId)}
 
     def readrepairlist(self, repairId):
         data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}'".format(repairId))
