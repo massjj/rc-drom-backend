@@ -22,12 +22,13 @@ class Repairlist:
         logs = self.create(newID,userId ,statusId, maintenanceId, phone,informDate,acceptDate,repairDate,timeRepair,description)
         return logs
 
-    def createLineItem (self, repairId, itemId):
-        data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND item_id = '{}' ".format(repairId,itemId))
+    def createLineItem (self, itemId):
+        
+        newID = increaseID(data[0][0],"RCT")
+        data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND item_id = '{}' ".format(newID,itemId))
         if len(data) > 0:
             return {'0.status': 'Error','1.Repair ID': '','2.Item ID' : ''}
         else:
-            newID = increaseID(data[0][0],"RCT")
             self.db.execute ("INSERT INTO repair_item (repair_id,item_id) VALUES ('{}','{}')".format(newID, itemId))
         return {'0.status': 'Correct','1.Repair ID': '{}'.format(newID),'2.Item ID' : '{}'.format(itemId)}
 
