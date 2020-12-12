@@ -151,17 +151,16 @@ def readRepairlist():
 @cross_origin()
 def createRepairlist():
    if request.method=='POST':
-      # repairId=request.form['repair_id']
       userId=request.form['user_id']
-      statusId=request.form['status_id']
-      maintenanceId=request.form['maintenance_id']
+      # statusId=request.form['status_id']
+      # maintenanceId=request.form['maintenance_id']
       phone=request.form['phone']
-      informDate=request.form['inform_date']
-      acceptDate=request.form['accept_date']
+      # informDate=request.form['inform_date']
+      # acceptDate=request.form['accept_date']
       repairDate=request.form['repair_date']
       timeRepair=request.form['time_repair']
       description=request.form['description']
-      logs = repairlists.register(userId,statusId,maintenanceId,phone,informDate,acceptDate,repairDate,timeRepair,description)
+      logs = repairlists.register(userId,phone,repairDate,timeRepair,description)
       return jsonify(logs)
    else:
       return "Please use post medthod"
@@ -172,15 +171,15 @@ def updateRepairlist():
    if request.method=='PUT':
       repairId=request.form['repair_id']
       newuserId=request.form['user_id']
-      newstatusId=request.form['status_id']
-      newmaintenanceId=request.form['maintenance_id']
+      # newstatusId=request.form['status_id']
+      # newmaintenanceId=request.form['maintenance_id']
       newphone=request.form['phone']
-      newinformDate=request.form['inform_date']
-      newacceptDate=request.form['accept_date']
+      # newinformDate=request.form['inform_date']
+      # newacceptDate=request.form['accept_date']
       newrepairDate=request.form['repair_date']
       newtimeRepair=request.form['time_repair']
       newdescription=request.form['description']
-      logs = repairlists.update(repairId,newuserId,newstatusId,newmaintenanceId,newphone,newinformDate,newacceptDate,newrepairDate,newtimeRepair,newdescription)
+      logs = repairlists.update(repairId,newuserId,newphone,newrepairDate,newtimeRepair,newdescription)
       return jsonify(logs)
    else:
       return "Please use post medthod"
@@ -212,15 +211,6 @@ def createRepairlistitem():
    if request.method=='POST':
       # repairId=request.form['repair_id']
       itemId = request.form['item_id'] 
-      # userId=request.form['user_id']
-      # statusId=request.form['status_id']
-      # maintenanceId=request.form['maintenance_id']
-      # phone=request.form['phone']
-      # informDate=request.form['inform_date']
-      # acceptDate=request.form['accept_date']
-      # repairDate=request.form['repair_date']
-      # timeRepair=request.form['time_repair']
-      # description=request.form['description']
       logs = repairlists.registerlineitem(itemId)         
       return jsonify(logs)
       # return jsonify({"repair": repairId,"item": itemId})
