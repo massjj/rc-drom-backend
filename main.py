@@ -18,7 +18,7 @@ maintenances = Maintenance()
 @cross_origin()
 def home():
     print(os.getenv("DB_HOST"))
-    return "Welcom to backend EiEi. T^T"
+    return "Welcom to backend EiEi. T^T local"
 
 @app.route('/login',methods=['POST'])
 @cross_origin()
@@ -212,11 +212,9 @@ def createRepairlistitem():
    if request.method=='POST':
       repairId=request.form['repair_id']
       itemId = request.form['item_id'] 
-      # for itemId in items :
-      #    logs = repairlists.createLineItem(repairId,itemId)         
-      # logs = repairlists.createLineItem(repairId,itemId)
-      # return jsonify(logs)
-      return jsonify({"repair": repairId,"item": itemId})
+      # logs = repairlists.createLineItem(repairId,itemId)         
+      return jsonify("owo")
+      # return jsonify({"repair": repairId,"item": itemId})
    else:
       return "Please use post medthod"
 
