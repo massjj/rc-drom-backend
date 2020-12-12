@@ -30,10 +30,10 @@ class Repairlist:
             self.db.execute ("INSERT INTO repair_item (repair_id,item_id) VALUES ('{}','{}')".format(repairId, itemId))
         return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.Item ID' : '{}'.format(itemId)}
 
-    def registerlineitem(self, itemId):
+    def registerlineitem(self, itemId,userId ,statusId, maintenanceId, phone,informDate,acceptDate,repairDate,timeRepair,description):
         data, columns = self.db.fetch ("SELECT MAX(r.repair_id) FROM repair_item r ")
         newID = increaseID(data[0][0],"RCT")
-        logs = self.createLineItem(newID,itemId)
+        logs = self.createLineItem(newID,itemId,userId ,statusId, maintenanceId, phone,informDate,acceptDate,repairDate,timeRepair,description)
         return logs
 
     def readrepairlist(self, repairId):
