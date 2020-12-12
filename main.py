@@ -212,7 +212,7 @@ def createRepairlistitem():
    if request.method=='POST':
       # repairId=request.form['repair_id']
       itemId = request.form['item_id'] 
-      logs = repairlists.createLineItem(itemId)         
+      logs = repairlists.readrepairlistitem(itemId)         
       return jsonify(logs)
       # return jsonify({"repair": repairId,"item": itemId})
    else:
