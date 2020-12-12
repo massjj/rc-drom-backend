@@ -20,6 +20,14 @@ def home():
     print(os.getenv("DB_HOST"))
     return "Welcom to backend EiEi"
 
+@app.route('/login',methods=['POST'])
+@cross_origin()
+def login():
+   userId=request.form['user_id']
+   password=request.form['password']
+   logs = userlogins.login(userId, password)
+   return logs
+
 #Userlogin
 @app.route('/getUserlogin', methods=['GET'])
 @cross_origin()

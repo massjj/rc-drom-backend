@@ -37,7 +37,16 @@ class Userlogin:
         else:
             return {'Is Error': 'Delete ERROR. It is Foreige key.', 'user ID': '{}'.format(userId)}
         return {'Is Error': 'Delete Successful', 'user ID': '{}'.format(userId)}
-
+    
+    def login(self, userId, password):
+        data, columns = self.db.fetch ("SELECT password FROM userlogin WHERE user_id = '{}' ".format(userId))
+        if len(data) == 1:
+            if data[0][0] == password:
+                return {'Is Error': False , 'Error Message': userId}
+            else:
+                return {'Is Error': True , 'Error Message': 'Password is wrong'}
+        else:
+            return {'Is Error': True , 'Error Message': 'User not found'}
     def dump(self):
         data, columns = self.db.fetch ('SELECT user_id as "User ID", password as "Password", user_type as "User Type", user_name as "User Name" '
                                         'FROM userlogin')
