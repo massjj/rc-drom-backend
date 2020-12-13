@@ -21,19 +21,13 @@ class Repairlist:
         logs = self.create(newID,userId, phone,repairDate,timeRepair,description)
         return logs
 
-    def createLineItem (self, itemId):
+    def createLineItem (self, repairId, itemId):
         data,columns = self.db.fetch ("SELECT * FROM repair_item WHERE repair_id = '{}' AND item_id = '{}' ".format(repairId,itemId))
         if len(data) > 0:
             return {'0.status': 'Error','1.Repair ID': '','2.Item ID' : ''}
         else:
             self.db.execute ("INSERT INTO repair_item (repair_id,item_id) VALUES ('{}','{}')".format(repairId, itemId))
         return {'0.status': 'Correct','1.Repair ID': '{}'.format(repairId),'2.Item ID' : '{}'.format(itemId)}
-
-    def registerlineitem(self, itemId):
-        data, columns = self.db.fetch ("SELECT MAX(r.repair_id) FROM repair_item r ")
-        newID = increaseID(data[0][0],"RCT")
-        logs = self.createLineItem(newID,itemId)
-        return logs
 
     def readrepairlist(self, repairId):
         data, columns = self.db.fetch ("SELECT * FROM repairlist WHERE repair_id = '{}'".format(repairId))

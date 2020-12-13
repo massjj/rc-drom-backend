@@ -205,9 +205,9 @@ def readRepairlistitem():
 @cross_origin()
 def createRepairlistitem():
    if request.method=='POST':
-      # repairId=request.form['repair_id']
+      repairId = request.form['repair_id']
       itemId = request.form['item_id'] 
-      logs = repairlists.registerlineitem(itemId)         
+      logs = repairlists.createLineItem(repairId, itemId)         
       return jsonify(logs)
       # return jsonify({"repair": repairId,"item": itemId})
    else:
