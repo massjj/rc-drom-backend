@@ -12,7 +12,7 @@
 Back-End
 
 วิธีการลง Package ต่างๆ ที่ต้องใช้
-1. ที่ path:../rc-drom-backend
-   pip install -r requirement.txt เพื่อทำการลง package ที่ระบบต้องการใช้ 
-2. path:../rc-drom-backend
- >python main.py
+1. ที่ path:../rc-drom-backend เพื่อทำการลง package ที่ระบบต้องการใช้ 
+```
+pip install -r requirement.txt
+```
